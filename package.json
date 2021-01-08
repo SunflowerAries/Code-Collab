@@ -1,11 +1,10 @@
 {
-  "name": "Collab",
+  "name": "NoMore.docs",
   "version": "1.0.0",
   "description": "A simple client/server app using ShareDB and WebSockets",
   "main": "server.js",
   "scripts": {
     "format": "npx prettier --write \"src/**/*.js\"",
-    "build": "mkdir -p static/dist/ && ./node_modules/.bin/browserify client.js -o static/dist/bundle.js",
     "start": "node server.js"
   },
   "author": "Nate Smith",
