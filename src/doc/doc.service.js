@@ -1,29 +1,34 @@
-const ShareDB = require('sharedb');
-const WebSocket = require('ws');
-const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
-
-const storage = require('sharedb-mongo')('mongodb://localhost:27017/test');
+const { backend } = require("../storage/storage.service");
+const storage = require("../storage/storage.service");
+const randomString = require("../utils/randstr-generator");
+const { URL_LEN } = require("../utils/config");
+const Doc = storage.Doc;
 
 module.exports = {
-    backend,
-    createDoc
+  createDoc,
 };
 
-async function 
-
-createDoc(startServer);
-
-const backend = new ShareDB({db});
-
 // Create initial document then fire callback
-function createDoc() {
-  var connection = backend.connect();
-  var doc = connection.get('collab', 'textarea');
-  doc.fetch(function(err) {
-    if (err) throw err;
-    if (doc.type === null) {
-      doc.create({content: ''}, callback);
-      return;
-    }
+async function createDoc(docParam) {
+  if (await Doc.findOne({ _id: docParam.docname, creator: docParam.creator })) {
+    throw 'Docname "' + docParam.docname + '" is already taken';
+  }
+
+  const url = randomString(URL_LEN);
+  const doc = new Doc({
+    _id: docParam.docname,
+    creator: docParam.creator,
+    url: url,
   });
+  await doc.save();
+
+  var connection = backend.connect();
+  var doc = connection.get("docs", docParam.docname);
+  //   doc.fetch(function(err) {
+  //     if (err) throw err;
+  //     if (doc.type === null) {
+  //       doc.create({content: ''});
+  //       return;
+  //     }
+  //   });
 }

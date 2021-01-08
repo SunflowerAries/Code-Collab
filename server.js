@@ -8,7 +8,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('./src/utils/jwt');
 const errorHandler = require('./src/utils/error-handler');
-const docService = require('./src/doc/doc.service');
+const { backend } = require('./src/storage/storage.service');
 
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,13 +25,13 @@ app.use('/docs', require('./src/doc/doc.controller'));
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
+const port = 3000;
 const server = createServer(app);
 
 const wss = new WebSocket.Server({server: server});
 wss.on('connection', (ws) => {
   var stream = new WebSocketJSONStream(ws);
-  docService.backend.listen(stream);
+  backend.listen(stream);
 });
 
 server.listen(port, () => console.log(`Server listening on port ${port}`));
