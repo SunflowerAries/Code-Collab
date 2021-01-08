@@ -1,41 +1,37 @@
-var http = require('http');
-var express = require('express');
-var ShareDB = require('sharedb');
-var WebSocket = require('ws');
-var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
+const { createServer } = require('http');
+const express = require('express');
+const WebSocket = require('ws');
+const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 
-const db = require('sharedb-mongo')('mongodb://localhost:27017/test');
+const app = express();
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const jwt = require('./src/utils/jwt');
+const errorHandler = require('./src/utils/error-handler');
+const docService = require('./src/doc/doc.service');
 
-var backend = new ShareDB({db});
-createDoc(startServer);
+app.use(express.json({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
-// Create initial document then fire callback
-function createDoc(callback) {
-  var connection = backend.connect();
-  var doc = connection.get('collab', 'textarea');
-  doc.fetch(function(err) {
-    if (err) throw err;
-    if (doc.type === null) {
-      doc.create({content: ''}, callback);
-      return;
-    }
-    callback();
-  });
-}
+// use JWT auth to secure the api
+app.use(jwt());
 
-function startServer() {
-  // Create a web server to serve files and listen to WebSocket connections
-  var app = express();
-  app.use(express.static('static'));
-  var server = http.createServer(app);
+// api routes
+app.use('/auth', require('./src/auth/auth.controller'));
+app.use('/docs', require('./src/doc/doc.controller'));
+// global error handler
+app.use(errorHandler);
 
-  // Connect any incoming WebSocket connection to ShareDB
-  var wss = new WebSocket.Server({server: server});
-  wss.on('connection', function(ws) {
-    var stream = new WebSocketJSONStream(ws);
-    backend.listen(stream);
-  });
+// start server
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
+const server = createServer(app);
 
-  server.listen(8080);
-  console.log('Listening on http://localhost:8080');
-}
+const wss = new WebSocket.Server({server: server});
+wss.on('connection', (ws) => {
+  var stream = new WebSocketJSONStream(ws);
+  docService.backend.listen(stream);
+});
+
+server.listen(port, () => console.log(`Server listening on port ${port}`));

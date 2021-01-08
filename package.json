@@ -5,17 +5,23 @@
   "main": "server.js",
   "scripts": {
     "build": "mkdir -p static/dist/ && ./node_modules/.bin/browserify client.js -o static/dist/bundle.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "Nate Smith",
   "contributors": [
-    "Avital Oliver <avital@aoliver.org> (https://aoliver.org/)"
+    "Avital Oliver <avital@aoliver.org> (https://aoliver.org/)",
+    "Steve Luo"
   ],
   "license": "MIT",
   "dependencies": {
     "@teamwork/websocket-json-stream": "^2.0.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.10",
     "reconnecting-websocket": "^4.2.0",
     "sharedb": "^1.5.2",
     "sharedb-mongo": "^1.0.0-beta.15",
