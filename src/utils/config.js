@@ -1,5 +1,5 @@
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
-const MONGODB_DBNAME = process.env.MONGODB_DBNAME || "test";
+const MONGODB_DBNAME = process.env.MONGODB_DBNAME || "nomore";
 const MONGODB_OPTION = {
   useCreateIndex: true,
   useNewUrlParser: true,

@@ -9,7 +9,7 @@ const {
 mongoose.connect(MONGODB_URI + "/" + MONGODB_DBNAME, MONGODB_OPTION);
 mongoose.Promise = global.Promise;
 
-const db = require("sharedb-mongo")("mongodb://localhost:27017/test");
+const db = require("sharedb-mongo")("mongodb://localhost:27017/nomore");
 const backend = new ShareDB({ db });
 
 module.exports = {

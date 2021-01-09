@@ -6,29 +6,30 @@ const Doc = storage.Doc;
 
 module.exports = {
   createDoc,
+  getDocs,
 };
 
 // Create initial document then fire callback
-async function createDoc(docParam) {
-  if (await Doc.findOne({ _id: docParam.docname, creator: docParam.creator })) {
+async function createDoc(userId, docParam) {
+  if (await Doc.findOne({ _id: docParam.docname, creator: userId })) {
     throw 'Docname "' + docParam.docname + '" is already taken';
   }
 
   const url = randomString(URL_LEN);
   const doc = new Doc({
     _id: docParam.docname,
-    creator: docParam.creator,
+    creator: userId,
     url: url,
   });
   await doc.save();
 
   var connection = backend.connect();
   var doc = connection.get("docs", docParam.docname);
-  //   doc.fetch(function(err) {
-  //     if (err) throw err;
-  //     if (doc.type === null) {
-  //       doc.create({content: ''});
-  //       return;
-  //     }
-  //   });
+  return {
+    ...doc.toJSON()
+  }
+}
+
+async function getDocs(userId) {
+  return await Doc.find({ creator: userId }, 'url');
 }
