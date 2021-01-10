@@ -1,3 +1,5 @@
+const { BadRequestException, UnauthorizedException, InternalServerErrorException } = require("./exception-code");
+
 module.exports = errorHandler;
 
 function errorHandler(err, req, res, next) {
