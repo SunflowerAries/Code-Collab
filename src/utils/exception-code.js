@@ -5,9 +5,9 @@ const ConflictException = 409;
 const InternalServerErrorException = 500;
 
 module.exports = {
-    BadRequestException,
-    UnauthorizedException,
-    NotFoundException,
-    ConflictException,
-    InternalServerErrorException
-}
+  BadRequestException,
+  UnauthorizedException,
+  NotFoundException,
+  ConflictException,
+  InternalServerErrorException,
+};

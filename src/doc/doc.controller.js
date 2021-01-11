@@ -12,12 +12,19 @@ module.exports = router;
 function createDoc(req, res, next) {
   docService
     .createDoc(req.user.sub, req.body)
-    .then((doc) => doc ? res.json(doc) : doc.status(ConflictException).json({ message: "Docname has been used" }))
+    .then((doc) =>
+      doc
+        ? res.json(doc)
+        : doc
+            .status(ConflictException)
+            .json({ message: "Docname has been used" })
+    )
     .catch((err) => next(err));
 }
 
 function getDocs(req, res, next) {
-  docService.getDocs(req.user.sub)
-  .then((docs) => res.json(docs))
-  .catch((err) => next(err));
+  docService
+    .getDocs(req.user.sub)
+    .then((docs) => res.json(docs))
+    .catch((err) => next(err));
 }

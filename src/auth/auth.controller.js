@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authService = require("./auth.service");
-const { BadRequestException } = require("../utils/exception-code")
+const { BadRequestException } = require("../utils/exception-code");
 
 // routes
 router.post("/login", login);
@@ -15,7 +15,9 @@ function login(req, res, next) {
     .then((user) =>
       user
         ? res.json(user)
-        : res.status(BadRequestException).json({ message: "Username or password is incorrect" })
+        : res
+            .status(BadRequestException)
+            .json({ message: "Username or password is incorrect" })
     )
     .catch((err) => next(err));
 }

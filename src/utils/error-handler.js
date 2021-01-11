@@ -1,4 +1,8 @@
-const { BadRequestException, UnauthorizedException, InternalServerErrorException } = require("./exception-code");
+const {
+  BadRequestException,
+  UnauthorizedException,
+  InternalServerErrorException,
+} = require("./exception-code");
 
 module.exports = errorHandler;
 
@@ -19,5 +23,7 @@ function errorHandler(err, req, res, next) {
   }
 
   // default to 500 server error
-  return res.status(InternalServerErrorException).json({ message: err.message });
+  return res
+    .status(InternalServerErrorException)
+    .json({ message: err.message });
 }

@@ -26,10 +26,10 @@ async function createDoc(userId, docParam) {
   var connection = backend.connect();
   var doc = connection.get("docs", docParam.docname);
   return {
-    ...doc.toJSON()
-  }
+    ...doc.toJSON(),
+  };
 }
 
 async function getDocs(userId) {
-  return await Doc.find({ creator: userId }, 'url');
+  return await Doc.find({ creator: userId }, "url");
 }
