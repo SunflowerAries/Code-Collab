@@ -10,7 +10,7 @@ module.exports = router;
 
 function getDocs(req, res, next) {
   docService
-    .getDocs(req.user.sub)
+    .getDocs()
     .then((docs) => res.json(docs))
     .catch((err) => next(err));
 }

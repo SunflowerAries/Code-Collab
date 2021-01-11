@@ -34,6 +34,6 @@ async function createDoc(userId, docParam) {
   return doc;
 }
 
-async function getDocs(userId) {
-  return await Doc.find({ creator: userId }, "url docName createdAt");
+async function getDocs() {
+  return await Doc.find({}, "url docName createdAt");
 }
