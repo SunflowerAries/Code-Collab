@@ -11,25 +11,29 @@ module.exports = {
 
 // Create initial document then fire callback
 async function createDoc(userId, docParam) {
-  if (await Doc.findOne({ _id: docParam.docname, creator: userId })) {
-    throw 'Docname "' + docParam.docname + '" is already taken';
+  console.log(`enter createDoc, ${docParam.docName}`);
+  if (await Doc.findOne({ docName: docParam.docName, creator: userId })) {
+    throw 'Docname "' + docParam.docName + '" is already taken';
   }
 
   const url = randomString(URL_LEN);
+
   const doc = new Doc({
-    _id: docParam.docname,
+    docName: docParam.docName,
     creator: userId,
-    url: url,
+    url,
   });
   await doc.save();
 
   var connection = backend.connect();
-  var doc = connection.get("docs", docParam.docname);
-  return {
-    ...doc.toJSON(),
-  };
+  var docFile = connection.get("docs", docParam.docName);
+  docFile.fetch(function (err) {
+    if (err) throw err;
+  });
+  console.log(doc);
+  return doc;
 }
 
 async function getDocs(userId) {
-  return await Doc.find({ creator: userId }, "url");
+  return await Doc.find({ creator: userId }, "url docName createdAt");
 }
