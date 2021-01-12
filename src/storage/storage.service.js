@@ -11,9 +11,10 @@ mongoose.Promise = global.Promise;
 
 const db = require("sharedb-mongo")("mongodb://localhost:27017/nomore");
 const backend = new ShareDB({ db });
+const connection = backend.connect();
 
 module.exports = {
   User: require("../auth/auth.model"),
   Doc: require("../doc/doc.model"),
-  backend,
+  connection,
 };

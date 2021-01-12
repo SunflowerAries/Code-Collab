@@ -1,4 +1,4 @@
-const { backend } = require("../storage/storage.service");
+const { connection } = require("../storage/storage.service");
 const storage = require("../storage/storage.service");
 const Doc = storage.Doc;
 
@@ -14,7 +14,6 @@ async function createDoc(userId, docParam) {
     throw 'Docname "' + docParam.docName + '" is already taken';
   }
 
-  var connection = backend.connect();
   var doc = connection.get("docs", docParam.docName);
   doc.fetch(function (err) {
     if (err) throw err;
