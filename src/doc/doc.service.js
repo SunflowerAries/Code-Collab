@@ -1,7 +1,5 @@
 const { backend } = require("../storage/storage.service");
 const storage = require("../storage/storage.service");
-const randomString = require("../utils/randstr-generator");
-const { URL_LEN } = require("../utils/config");
 const Doc = storage.Doc;
 
 module.exports = {
@@ -12,28 +10,23 @@ module.exports = {
 // Create initial document then fire callback
 async function createDoc(userId, docParam) {
   console.log(`enter createDoc, ${docParam.docName}`);
-  if (await Doc.findOne({ docName: docParam.docName, creator: userId })) {
+  if (await Doc.findOne({ _id: docParam.docName, creator: userId })) {
     throw 'Docname "' + docParam.docName + '" is already taken';
   }
 
-  const url = randomString(URL_LEN);
-
-  const doc = new Doc({
-    docName: docParam.docName,
-    creator: userId,
-    url,
-  });
-  await doc.save();
-
   var connection = backend.connect();
-  var docFile = connection.get("docs", docParam.docName);
-  docFile.fetch(function (err) {
+  var doc = connection.get("docs", docParam.docName);
+  doc.fetch(function (err) {
     if (err) throw err;
+    if (doc.type === null) {
+      doc.create();
+      return;
+    }
   });
   console.log(doc);
   return doc;
 }
 
 async function getDocs() {
-  return await Doc.find({}, "url docName createdAt");
+  return await Doc.find({}, "createdAt");
 }
