@@ -10,21 +10,23 @@ module.exports = {
 // Create initial document then fire callback
 async function createDoc(userId, docParam) {
   console.log(`enter createDoc, ${docParam.docName}`);
-  // if (await Doc.findOne({ _id: docParam.docName, creator: userId })) {
-  //   throw 'Docname "' + docParam.docName + '" is already taken';
-  // }
+  if (await Doc.findOne({ _id: docParam.docName, creator: userId })) {
+    throw 'Docname "' + docParam.docName + '" is already taken';
+  }
 
-  connection.get("docs", docParam.docName).then((doc) => {
-    doc.fetch(function (err) {
-      if (err) throw err;
-      if (doc.type === null) {
-        doc.create();
-        return docParam;
-      }
-    });
-    console.log(doc);
-    return doc;
+  var doc = connection.get("docs", docParam.docName);
+  console.log(doc);
+  doc.fetch(function (err) {
+    console.log(`fetch ${err} ${doc.type === null}`);
+    if (err) throw err;
+    if (doc.type === null) {
+      console.log("before create");
+      doc.create({ content: "" });
+      console.log("create");
+      return;
+    }
   });
+  return doc;
 }
 
 async function getDocs() {

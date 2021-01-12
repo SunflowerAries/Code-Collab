@@ -20,7 +20,7 @@ function createDoc(req, res, next) {
     .createDoc(req.user.sub, req.body)
     .then((doc) =>
       doc
-        ? res.json(doc)
+        ? doc
         : doc
             .status(ConflictException)
             .json({ message: "Docname has been used" })

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  docName: { type: String, required: true },
+  _id: { type: String, required: true },
   creator: { type: String, required: true },
   content: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
