@@ -16,5 +16,6 @@ const connection = backend.connect();
 module.exports = {
   User: require("../auth/auth.model"),
   Doc: require("../doc/doc.model"),
+  backend,
   connection,
 };
