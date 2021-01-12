@@ -15,18 +15,16 @@ async function createDoc(userId, docParam) {
   }
 
   var doc = connection.get("docs", docParam.docName);
-  console.log(doc);
   doc.fetch(function (err) {
-    console.log(`fetch ${err} ${doc.type === null}`);
     if (err) throw err;
     if (doc.type === null) {
       console.log("before create");
       doc.create({ content: "" });
       console.log("create");
-      return;
+      return docParam;
     }
   });
-  return doc;
+  return docParam;
 }
 
 async function getDocs() {

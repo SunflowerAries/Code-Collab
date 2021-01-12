@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const docService = require("./doc.service");
 const { ConflictException } = require("../utils/exception-code");
+var util = require('util');
 
 router.post("/", createDoc);
 router.get("/", getDocs);
@@ -18,12 +19,12 @@ function getDocs(req, res, next) {
 function createDoc(req, res, next) {
   docService
     .createDoc(req.user.sub, req.body)
-    .then((doc) =>
+    .then((doc) => 
       doc
-        ? doc
-        : doc
-            .status(ConflictException)
-            .json({ message: "Docname has been used" })
+      ? res.json(doc)
+      : res
+          .status(ConflictException)
+          .json({ message: "Docname has been used" })
     )
     .catch((err) => next(err));
 }
